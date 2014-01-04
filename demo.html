@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://jquery.bassistance.de/treeview/jquery.treeview.css" rel="stylesheet"/>
+    <link href="lib/css/style.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="jumbotron">
+		<div class="page-header">
+			<h1>
+				Jquery.Treeview.Searchbox <small>DEMO</small>
+			</h1>			
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+        <div class="col-md-3">
+            <div id="treeContainer">
+                <div id="sidetreeheader"></div>
+                <div id="sidetreecontrol"><a href="?#">Recolher Todos</a> | <a href="?#">Expandir Todos</a> </div>
+                <ul>
+                    <li>
+                        <span id="0" class="node label label-default root">Root Level</span>
+                        <ul>
+	                    	<li>
+	                        	<span id='2903' class='node label label-default'>Level 1a</span>
+		                        <ul>
+		                    		<li>
+		                        		<span id='2937' class='node label label-default'>Level 1a.1</span>
+		                        		<ul>
+			                    			<li>
+		                        				<span id='2971' class='leaf label label-default'>Level 1a.1.1</span>
+		                    				</li>
+				                    		<li>
+				                        		<span id='2969' class='leaf label label-default'>Level 1a.1.2</span>
+				                    		</li>
+						                    <li>
+						                        <span id='2972' class='leaf label label-default'>Level 1a.1.3</span>
+						                    </li>
+						                    <li>
+						                        <span id='2970' class='leaf label label-default'>Level 1a.1.4</span>                        
+						                    </li>
+										</ul>
+		                    		</li>
+		                    		<li>
+		                        		<span id='2936' class='leaf label label-default'>Level 1a.2</span>
+				                    </li>
+				                    <li>
+				                        <span id='341' class='node label label-default'>Level 1a.3</span>
+				                        <ul>
+						                    <li>
+						                        <span id='3008' class='leaf label label-default'>Level 1a.3.1</span>
+						                    </li>
+						                    <li>
+						                        <span id='3010' class='leaf label label-default'>Level 1a.3.2</span>						                        
+						                    </li>
+						                    <li>
+						                        <span id='3011' class='leaf label label-default'>Level 1a.3.3</span>						                        
+						                    </li>
+						                    <li>
+						                        <span id='3009' class='leaf label label-default'>Level 1a.3.4</span>						                        
+						                    </li>
+										</ul>
+	                    			</li>
+	                    		</ul>
+                    		</li>
+                    	</ul>
+                	</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div id="categoriesWrapper">
+                <div id="categories">
+                    <div id="searchBox"></div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+	</div>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://jquery.bassistance.de/treeview/jquery.treeview.js" ></script>
+	<script src="src/jquery.treeview.searchbox.js"></script>
+	<script type="text/javascript">
+        var CategoriesForm = (function () {
+
+            function categoriesForm() {
+                this.SellerId = $("#hidSellerId").val();
+            }
+
+            categoriesForm.prototype.initTreeView = function () {
+                $("div#treeContainer > ul").treeview({
+                    collapsed: true,
+                    animated: "medium",
+                    control: "#sidetreecontrol",
+                    persist: "location"
+                });
+                $("div#treeContainer").show();
+            };
+
+            categoriesForm.prototype.show = function () {
+                $("#loader").hide();
+                $("#frmCategories").show();
+            };
+
+            categoriesForm.prototype.hide = function () {
+                $("#feedback").hide();
+                $("#frmCategories").hide();
+            };
+
+            categoriesForm.prototype.showSuccessMessage = function () {
+                $("#feedback").show();
+            };
+
+            categoriesForm.prototype.showLoader = function (message) {
+                $("#loader").text(message).show();
+            };
+
+            categoriesForm.prototype.CategoryId = function (value) {
+                if (typeof value === "undefined") {
+                    return $("#hidCategoryId").val();
+                }
+                $("#hidCategoryId").val(value);
+
+                return false;
+            };
+
+            categoriesForm.prototype.CategoryName = function (value) {
+                if (typeof value === "undefined") {
+                    return $("#categoryName").text();
+                }
+                $("#categoryName").text(value);
+
+                return false;
+            };
+
+            categoriesForm.prototype.initAffix = function (pos) {
+                var $this = $("#categories"), $window = $(window);
+
+                $window.scroll(function () {
+                    if ($window.scrollTop() <= pos) {
+                        $this.removeClass("fixed");
+                    } else {
+                        $this.addClass("fixed");
+                    }
+                });
+            };
+
+            return categoriesForm;
+
+        })();
+
+        $(function () {
+
+            var searchSelector = '#treeContainer .leaf, #treeContainer .node';
+
+            var form = new CategoriesForm();
+
+            form.initTreeView();
+            form.initAffix(200);
+
+            $("#searchBox").searchBox({
+                treeviewWrapperSelector: "#treeContainer",
+                searchSelector: searchSelector,
+                searchPlaceholder: "Pesquisar categoria"
+            });
+
+            $(searchSelector)
+                .click(function (e) {
+
+                    var $this = $(this);
+
+                    form.CategoryId($this.attr("id"));
+
+                    form.CategoryName($this.text());
+
+                    form.hide();
+
+                    form.show();
+
+                    e.preventDefault();
+                })
+                .mouseover(function () {
+                    $(this).addClass("label-inverse");
+                })
+                .mouseout(function () {
+                    $(this).removeClass("label-inverse");
+                });
+        });
+
+
+    </script>
+</body>
+</html>
