@@ -20,50 +20,74 @@
             <div id="treeContainer">
                 <div id="sidetreeheader"></div>
                 <div id="sidetreecontrol"><a href="?#">Recolher Todos</a> | <a href="?#">Expandir Todos</a> </div>
-                <ul>
+                <ul id="mytreeview">
                     <li>
                         <span id="0" class="node label label-default root">Root Level</span>
                         <ul>
 	                    	<li>
-	                        	<span id='2903' class='node label label-default'>Level 1a</span>
+	                        	<span id='0000' class='node label label-default'>Level 1a</span>
 		                        <ul>
 		                    		<li>
-		                        		<span id='2937' class='node label label-default'>Level 1a.1</span>
+		                        		<span id='0001' class='node label label-default'>Level 1a.1</span>
 		                        		<ul>
 			                    			<li>
-		                        				<span id='2971' class='leaf label label-default'>Level 1a.1.1</span>
+		                        				<span id='00011' class='leaf label label-default'>Level 1a.1.1</span>
 		                    				</li>
 				                    		<li>
-				                        		<span id='2969' class='leaf label label-default'>Level 1a.1.2</span>
+				                        		<span id='00012' class='leaf label label-default'>Level 1a.1.2</span>
 				                    		</li>
 						                    <li>
-						                        <span id='2972' class='leaf label label-default'>Level 1a.1.3</span>
+						                        <span id='00013' class='leaf label label-default'>Level 1a.1.3</span>
 						                    </li>
 						                    <li>
-						                        <span id='2970' class='leaf label label-default'>Level 1a.1.4</span>                        
+						                        <span id='00014' class='leaf label label-default'>Level 1a.1.4</span>                        
 						                    </li>
 										</ul>
 		                    		</li>
+	                    		</ul>
+                    		</li>
+                    		<li>
+	                        	<span id='0010' class='node label label-default'>Level 1b</span>
+		                        <ul>
 		                    		<li>
-		                        		<span id='2936' class='leaf label label-default'>Level 1a.2</span>
-				                    </li>
-				                    <li>
-				                        <span id='341' class='node label label-default'>Level 1a.3</span>
-				                        <ul>
+		                        		<span id='0011' class='node label label-default'>Level 1b.1</span>
+		                        		<ul>
+			                    			<li>
+		                        				<span id='2971' class='leaf label label-default'>Level 1b.1.1</span>
+		                    				</li>
+				                    		<li>
+				                        		<span id='2969' class='leaf label label-default'>Level 1b.1.2</span>
+				                    		</li>
 						                    <li>
-						                        <span id='3008' class='leaf label label-default'>Level 1a.3.1</span>
+						                        <span id='2972' class='leaf label label-default'>Level 1b.1.3</span>
 						                    </li>
 						                    <li>
-						                        <span id='3010' class='leaf label label-default'>Level 1a.3.2</span>						                        
+						                        <span id='2970' class='leaf label label-default'>Level 1b.1.4</span>                        
 						                    </li>
 						                    <li>
-						                        <span id='3011' class='leaf label label-default'>Level 1a.3.3</span>						                        
-						                    </li>
-						                    <li>
-						                        <span id='3009' class='leaf label label-default'>Level 1a.3.4</span>						                        
-						                    </li>
+					                        	<span id='0011' class='node label label-default'>Level 1b</span>
+						                        <ul>
+						                    		<li>
+						                        		<span id='0011' class='node label label-default'>Level 1b.1</span>
+						                        		<ul>
+							                    			<li>
+						                        				<span id='2971' class='leaf label label-default'>Level 1b.1.1</span>
+						                    				</li>
+								                    		<li>
+								                        		<span id='2969' class='leaf label label-default'>Level 1b.1.2</span>
+								                    		</li>
+										                    <li>
+										                        <span id='2972' class='leaf label label-default'>Level 1b.1.3</span>
+										                    </li>
+										                    <li>
+										                        <span id='2970' class='leaf label label-default'>Level 1b.1.4</span>                        
+										                    </li>
+														</ul>
+						                    		</li>
+					                    		</ul>
+				                    		</li>
 										</ul>
-	                    			</li>
+		                    		</li>
 	                    		</ul>
                     		</li>
                     	</ul>
@@ -91,49 +115,13 @@
             }
 
             categoriesForm.prototype.initTreeView = function () {
-                $("div#treeContainer > ul").treeview({
+                $("#mytreeview").treeview({
                     collapsed: true,
                     animated: "medium",
                     control: "#sidetreecontrol",
                     persist: "location"
                 });
                 $("div#treeContainer").show();
-            };
-
-            categoriesForm.prototype.show = function () {
-                $("#loader").hide();
-                $("#frmCategories").show();
-            };
-
-            categoriesForm.prototype.hide = function () {
-                $("#feedback").hide();
-                $("#frmCategories").hide();
-            };
-
-            categoriesForm.prototype.showSuccessMessage = function () {
-                $("#feedback").show();
-            };
-
-            categoriesForm.prototype.showLoader = function (message) {
-                $("#loader").text(message).show();
-            };
-
-            categoriesForm.prototype.CategoryId = function (value) {
-                if (typeof value === "undefined") {
-                    return $("#hidCategoryId").val();
-                }
-                $("#hidCategoryId").val(value);
-
-                return false;
-            };
-
-            categoriesForm.prototype.CategoryName = function (value) {
-                if (typeof value === "undefined") {
-                    return $("#categoryName").text();
-                }
-                $("#categoryName").text(value);
-
-                return false;
             };
 
             categoriesForm.prototype.initAffix = function (pos) {
@@ -154,11 +142,13 @@
 
         $(function () {
 
+            // tree nodes selector
             var searchSelector = '#treeContainer .leaf, #treeContainer .node';
 
             var form = new CategoriesForm();
 
             form.initTreeView();
+
             form.initAffix(200);
 
             $("#searchBox").searchBox({
@@ -168,20 +158,6 @@
             });
 
             $(searchSelector)
-                .click(function (e) {
-
-                    var $this = $(this);
-
-                    form.CategoryId($this.attr("id"));
-
-                    form.CategoryName($this.text());
-
-                    form.hide();
-
-                    form.show();
-
-                    e.preventDefault();
-                })
                 .mouseover(function () {
                     $(this).addClass("label-inverse");
                 })
@@ -189,7 +165,6 @@
                     $(this).removeClass("label-inverse");
                 });
         });
-
 
     </script>
 </body>
